@@ -1,0 +1,9 @@
+// jest.config.js
+export default {
+  transform: {
+    '^.+\\.js$': 'babel-jest'
+  },
+  // Informujemy, że pliki .js traktujemy jako ESM:
+  extensionsToTreatAsEsm: ['.js'],
+  testEnvironment: 'node'
+};
