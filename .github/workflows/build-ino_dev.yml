@@ -1,31 +1,54 @@
-name: Build on ino_dev
+name: CI on ino_dev
 
-#trigger akcji
 on:
   push:
     branches:
       - ino_dev
 
-#srodowisko
 jobs:
-  build:
+  #uruchomienie testow
+  test:
+    name: Run tests
     runs-on: ubuntu-latest
 
     steps:
-      #checkout kodu
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '16'
 
-      # instalacja zależności
       - name: Install dependencies
         run: npm install
 
-      # własny krok buildu lub lint/test
+      - name: Run npm test
+        run: npm test
+
+  #build
+  build:
+    name: Build and upload artifact
+    runs-on: ubuntu-latest
+    needs: test                #potrzebuje test do przejscia dalej
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm install
+
       - name: Run build
         run: npm run build
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-dist
+          path: dist/
