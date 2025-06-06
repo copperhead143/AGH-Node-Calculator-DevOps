@@ -1,0 +1,31 @@
+name: Build on ino_dev
+
+#trigger akcji
+on:
+  push:
+    branches:
+      - ino_dev
+
+#srodowisko
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      #checkout kodu
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      # instalacja zależności
+      - name: Install dependencies
+        run: npm install
+
+      # własny krok buildu lub lint/test
+      - name: Run build
+        run: npm run build
